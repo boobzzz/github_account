@@ -12,31 +12,41 @@ const query = `query {
 
 export default class App extends Component {
     state = {
-        loading: false,
-        data: {}
+        isLoading: false,
+        user: {}
     }
 
     componentDidMount = async () => {
-        // let { data } = this.state;
-        let apiData = await fetchGQL(apiSource, query)
-        console.log(apiData);
+        this.setState({
+            isLoading: true
+        })
+
+        let data = await fetchGQL(apiSource, query)
 
         this.setState({
-            data: apiData
+            isLoading: false,
+            user: data
         })
     }
 
     render() {
-        let { data } = this.state;
+        let { isLoading, user } = this.state;
+        console.log(user);
 
         return (
-            <div>
-                <pre>
-                    {`User data`}
-                </pre>
+            isLoading
+            ? <div>Loading...</div>
+            : <div>
+                <div>
+                    <pre style={{background: "grey", color: "white"}}>
+                        {JSON.stringify(user, null, 2)}
+                    </pre>
+                </div>
                 <hr/>
                 <div>
-                    {`User data`}
+                    <img src={user.avatarUrl} alt={user.name}/>
+                    <h3>{user.name}</h3>
+                    <p>{user.bio}</p>
                 </div>
             </div>
         )
