@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import fetchGQL from './lib/api.js';
 
-const apiSource = "https://api.github.com/graphql";
 const query = `query {
-    user(login: "boobzzz") {
+    user (login: "boobzzz") {
         name
         avatarUrl(size: 150)
         bio
@@ -13,7 +12,7 @@ const query = `query {
 export default class App extends Component {
     state = {
         isLoading: false,
-        user: {}
+        user: {},
     }
 
     componentDidMount = async () => {
@@ -21,24 +20,23 @@ export default class App extends Component {
             isLoading: true
         })
 
-        let data = await fetchGQL(apiSource, query)
+        let data = await fetchGQL(query);
 
         this.setState({
             isLoading: false,
-            user: data
+            user: data.user,
         })
     }
 
     render() {
         let { isLoading, user } = this.state;
-        console.log(user);
 
         return (
             isLoading
             ? <div>Loading...</div>
             : <div>
                 <div>
-                    <pre style={{background: "grey", color: "white"}}>
+                    <pre style={{ background: "grey", color: "white", padding: "10px" }}>
                         {JSON.stringify(user, null, 2)}
                     </pre>
                 </div>
